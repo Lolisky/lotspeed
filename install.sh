@@ -12,7 +12,7 @@ set -e
 
 # ================= 配置区域 =================
 GITHUB_REPO="Lolisky/lotspeed"
-GITHUB_BRANCH="main"
+GITHUB_BRANCH="ml-tcp"
 INSTALL_DIR="/opt/lotspeed"
 MODULE_NAME="lotspeed"
 VERSION="5.7-kernel6.8+"
