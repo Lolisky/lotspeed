@@ -9,6 +9,11 @@
 #include <linux/kernel.h>
 #include <linux/version.h>
 #include <linux/moduleparam.h>
+
+// Kernel 6.8+ uses the simpler 2-parameter cong_control API
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 8, 0)
+#define LOTSPEED_USE_2PARAM_CONG_CONTROL 1
+#endif
 #include <linux/jiffies.h>
 #include <linux/time.h>
 #include <linux/string.h>
@@ -386,7 +391,7 @@ static void lotspeed_adapt_and_control(struct sock *sk, const struct rate_sample
         rtt_us = ca->rtt_min ? ca->rtt_min : 1000;
     base_rtt = ca->rtt_min ? ca->rtt_min : rtt_us;
     high_delay_path = lotserver_hd_enable && base_rtt >= lotserver_hd_thresh_us;
-    brave_active = lotserver_brave_enable && time_before(now_jif, ca->brave_freeze_until);
+    brave_active = lotserver_brave_enable && time_before((unsigned long)now_jif, (unsigned long)ca->brave_freeze_until);
 
     // 定期进入 PROBE_RTT 刷新基准 RTT
     if (ca->state != PROBE_RTT &&
@@ -491,15 +496,17 @@ out_pacing:
 #endif
 }
 
-#ifdef LOTSPEED_NEW_CONG_CONTROL_API
-static void lotspeed_cong_control(struct sock *sk, u32 ack, int flag, const struct rate_sample *rs)
-{
-    lotspeed_adapt_and_control(sk, rs, flag);
-}
-#else
+// For kernel 6.8+, use the new 2-parameter API
+#ifdef LOTSPEED_USE_2PARAM_CONG_CONTROL
 static void lotspeed_cong_control(struct sock *sk, const struct rate_sample *rs)
 {
     lotspeed_adapt_and_control(sk, rs, 0);
+}
+#else
+// For older kernels, use the 4-parameter API
+static void lotspeed_cong_control(struct sock *sk, u32 ack, int flag, const struct rate_sample *rs)
+{
+    lotspeed_adapt_and_control(sk, rs, flag);
 }
 #endif
 

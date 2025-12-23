@@ -11,11 +11,11 @@
 set -e
 
 # ================= 配置区域 =================
-GITHUB_REPO="uk0/lotspeed"
-GITHUB_BRANCH="ml-tcp"
+GITHUB_REPO="Lolisky/lotspeed"
+GITHUB_BRANCH="main"
 INSTALL_DIR="/opt/lotspeed"
 MODULE_NAME="lotspeed"
-VERSION="5.6"
+VERSION="5.7-kernel6.8+"
 CURRENT_TIME=$(date '+%Y-%m-%d %H:%M:%S')
 CURRENT_USER=$(whoami)
 
@@ -133,7 +133,7 @@ print_banner() {
 ║                          |_|                                         ║
 ║                                                                      ║
 ║                 ML-TCP Auto-Scaling Edition                          ║
-║                       Version 5.6rc                                  ║
+║                Version 5.7 (Kernel 6.8+ Compatible)                ║
 ╚══════════════════════════════════════════════════════════════════════╝
 EOF
     echo -e "${NC}"
@@ -220,15 +220,13 @@ download_source() {
     }
 
     # 创建 Makefile
+    # 注意：内核版本检测已在源码中通过 LINUX_VERSION_CODE 宏处理
     cat > Makefile << 'EOF'
 obj-m += lotspeed.o
 
 KERNELDIR ?= /lib/modules/$(shell uname -r)/build
 
 ccflags-y := -std=gnu99
-ifneq ($(shell printf '%s\n6.12.0\n$(KERNEL_RELEASE)' | sort -V | head -n1),6.12.0)
-ccflags-y += -DLOTSPEED_NEW_CONG_CONTROL_API
-endif
 
 PWD := $(shell pwd)
 
