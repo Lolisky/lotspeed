@@ -4,6 +4,8 @@
     <img src="https://github.com/Lolisky/lotspeed/raw/ml-tcp/logo.png" width="400" height="400" />
 </div>
 
+# <span style="color: red;">⚠️ AI瞎改的，不知道用了会不会爆炸 ⚠️</span>
+
 > **v5.7 - Kernel 6.8+ 兼容版本**
 >
 > 本仓库基于 [uk0/lotspeed](https://github.com/uk0/lotspeed) 的 ml-tcp 分支，修复了 Linux 内核 6.8+ 的编译兼容性问题。
@@ -195,11 +197,11 @@ sudo tc qdisc del dev eth0 root netem
 
 ### 使用前
 
-![before](img/b058ec2ebdb2a095d396cea05dccf499.png)
+![before](https://github.com/Lolisky/lotspeed/raw/ml-tcp/img/b058ec2ebdb2a095d396cea05dccf499.png)
 
 ### 使用后
 
-![after](img/f7525becdae16659ddfd54d99efe0f66.png)
+![after](https://github.com/Lolisky/lotspeed/raw/ml-tcp/img/f7525becdae16659ddfd54d99efe0f66.png)
 
 ---
 
@@ -215,7 +217,7 @@ sudo tc qdisc del dev eth0 root netem
 ## 相关项目
 
 PAC (Proactive ACK Control) for TCP Incast Congestion:
-* https://github.com/uk0/TCP-Incast/tree/zeta-tcp
+* https://github.com/Lolisky/lotspeed
 
 ---
 
